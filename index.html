@@ -305,7 +305,7 @@
     <!-- Navigation Bar -->
     <nav class="fixed top-0 w-full z-50 glass border-b border-white/5 px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold tracking-tighter">
+            <a href="#" class="text-lg md:text-2xl font-bold tracking-tighter">
                 <span class="text-purple-600">VYSAKH</span><span class="text-purple-400"> P.M</span>
             </a>
             
@@ -318,19 +318,19 @@
                 <a href="#contact" class="hover:text-purple-500 transition-colors">Contact</a>
             </div>
 
-            <div class="flex items-center gap-2 lg:gap-4">
-                <a href="https://github.com/Vysakhpm" target="_blank" class="p-2 text-gray-400 hover:text-purple-500 transition" title="GitHub">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+            <div class="flex items-center gap-1 sm:gap-2 lg:gap-4">
+                <a href="https://github.com/Vysakhpm" target="_blank" class="p-1.5 xs:p-2 text-gray-400 hover:text-purple-500 transition" title="GitHub">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="xs:w-5 xs:h-4 md:h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
                 </a>
-                <a href="https://linkedin.com/in/vysakh-mahesh" target="_blank" class="p-2 text-gray-400 hover:text-purple-500 transition" title="LinkedIn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                <a href="https://linkedin.com/in/vysakh-mahesh" target="_blank" class="p-1.5 xs:p-2 text-gray-400 hover:text-purple-500 transition" title="LinkedIn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="xs:w-5 xs:h-4 md:h-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
                 </a>
-                <div class="h-4 w-[1px] bg-white/10 mx-2 hidden sm:block"></div>
+                <div class="h-4 w-[1px] bg-white/10 mx-1 hidden xs:block"></div>
                 <!-- Theme Toggle Button -->
-                <button id="theme-toggle" class="p-2 rounded-full glass hover:bg-white/10 transition-all duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                <button id="theme-toggle" class="p-1.5 xs:p-2 rounded-full glass hover:bg-white/10 transition-all duration-300">
+                    <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400 xs:w-5 xs:h-4 md:h-5"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 </button>
-                <button class="md:hidden" onclick="toggleMenu()">
+                <button class="md:hidden p-1.5 xs:p-2" onclick="toggleMenu()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                 </button>
                 <a href="#contact" class="hidden md:block px-6 py-2 btn-neon rounded-full text-sm font-bold text-white">Hire Me</a>
@@ -353,11 +353,11 @@
             <!-- Startup Badge -->
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-10 reveal">
                 <span class="flex h-2 w-2 rounded-full bg-purple-500 animate-pulse"></span>
-                <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400">Now Open for 2026 Collaborations</span>
-                <i data-lucide="chevron-right" class="w-3 h-3 text-gray-500"></i>
+                <span class="text-[9px] xs:text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400">Now Open for 2026 Collaborations</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
 
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-8 leading-[1.1] tracking-tight reveal">
+            <h1 class="text-3xl sm:text-7xl lg:text-8xl font-extrabold mb-8 leading-[1.1] tracking-tight reveal">
                 Engineering <br>
                 <span class="shimmer-text">Intelligent Systems</span>
             </h1>
@@ -367,12 +367,12 @@
                 and <span class="text-purple-500 font-semibold">predictive models</span> for high-growth tech ecosystems.
             </p>
 
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-6 reveal mb-20">
-                <a href="#projects" class="w-full sm:w-auto px-10 py-4 btn-neon rounded-xl font-bold flex items-center justify-center gap-3 text-white">
-                    Explore Ecosystem <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 reveal mb-20 w-full xs:w-auto">
+                <a href="#projects" class="w-full sm:w-auto px-6 md:px-10 py-4 btn-neon rounded-xl font-bold flex items-center justify-center gap-3 text-white">
+                    Explore Ecosystem <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </a>
-                <a href="https://drive.google.com/file/d/145Y_AjdWRroLK1P9M5WFALZnZtzrg62F/view?usp=drivesdk" target="_blank" class="w-full sm:w-auto px-10 py-4 glass hover:bg-white/10 border border-white/10 rounded-xl font-bold transition flex items-center gap-2">
-                    <i data-lucide="download" class="w-4 h-4 text-purple-500"></i> Get Resume
+                <a href="https://drive.google.com/file/d/145Y_AjdWRroLK1P9M5WFALZnZtzrg62F/view?usp=drivesdk" target="_blank" class="w-full sm:w-auto px-6 md:px-10 py-4 glass hover:bg-white/10 border border-white/10 rounded-xl font-bold transition flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Get Resume
                 </a>
             </div>
 
@@ -380,21 +380,14 @@
             <div class="w-full max-w-4xl reveal">
                 <p class="text-[10px] font-bold tracking-[0.3em] uppercase text-gray-400 mb-8">Trusted Tech Stack</p>
                 <div class="marquee py-4">
-                    <div class="marquee-content gap-12 text-sm font-mono text-gray-400 items-center">
-                        <span class="flex items-center gap-2"><i data-lucide="box" class="w-4 h-4"></i> DJANGO</span>
-                        <span class="flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4"></i> FASTAPI</span>
-                        <span class="flex items-center gap-2"><i data-lucide="brain-circuit" class="w-4 h-4"></i> PYTORCH</span>
-                        <span class="flex items-center gap-2"><i data-lucide="database" class="w-4 h-4"></i> POSTGRES</span>
-                        <span class="flex items-center gap-2"><i data-lucide="cloud" class="w-4 h-4"></i> AWS</span>
-                        <span class="flex items-center gap-2"><i data-lucide="layout" class="w-4 h-4"></i> REACT</span>
-                        <span class="flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4"></i> DOCKER</span>
-                        <span class="flex items-center gap-2"><i data-lucide="box" class="w-4 h-4"></i> DJANGO</span>
-                        <span class="flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4"></i> FASTAPI</span>
-                        <span class="flex items-center gap-2"><i data-lucide="brain-circuit" class="w-4 h-4"></i> PYTORCH</span>
-                        <span class="flex items-center gap-2"><i data-lucide="database" class="w-4 h-4"></i> POSTGRES</span>
-                        <span class="flex items-center gap-2"><i data-lucide="cloud" class="w-4 h-4"></i> AWS</span>
-                        <span class="flex items-center gap-2"><i data-lucide="layout" class="w-4 h-4"></i> REACT</span>
-                        <span class="flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4"></i> DOCKER</span>
+                    <div class="marquee-content gap-8 md:gap-12 text-sm font-mono text-gray-400 items-center">
+                        <span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg> DJANGO</span>
+                        <span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> FASTAPI</span>
+                        <span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><circle cx="12" cy="12" r="3"/></svg> PYTORCH</span>
+                        <span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg> POSTGRES</span>
+                        <span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M17.5 19a5.5 5.5 0 0 0 0-11h-1.28a7.5 7.5 0 0 0-14.57 2.5A5.5 5.5 0 0 0 5.5 19h12z"/></svg> AWS</span>
+                        <span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg> REACT</span>
+                        <span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m2.6 12.08 8.58 3.9a2 2 0 0 0 1.66 0l8.58-3.9"/><path d="m2.6 17.08 8.58 3.9a2 2 0 0 0 1.66 0l8.58-3.9"/></svg> DOCKER</span>
                     </div>
                 </div>
             </div>
@@ -406,7 +399,7 @@
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 <div class="reveal relative">
-                    <div class="w-full aspect-square max-w-md mx-auto relative">
+                    <div class="w-full aspect-square max-w-[280px] md:max-w-md mx-auto relative">
                         <div class="absolute inset-0 bg-gradient-to-tr from-purple-600 to-transparent rounded-3xl rotate-6 opacity-10"></div>
                         <div class="absolute inset-0 border border-purple-500/20 rounded-3xl -rotate-3"></div>
                         <div class="w-full h-full bg-slate-900 rounded-3xl overflow-hidden glass relative z-10 flex items-center justify-center">
