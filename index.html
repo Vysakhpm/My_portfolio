@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vysakh P M | AI Engineer & Python Full-Stack Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Three.js for 3D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --bg-deep: #0B0B0F;
+            --surface: #14141A;
+            --primary: #7C3AED;
+            --secondary: #A855F7;
+            --neon: #E879F9;
+            --text-main: #F3F4F6;
+            --text-dim: #9CA3AF;
+            --border-alpha: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(11, 11, 15, 0.4);
+        }
+
+        html.light {
+            --bg-deep: #F3F4F6;
+            --surface: #FFFFFF;
+            --primary: #6D28D9;
+            --secondary: #9333EA;
+            --neon: #C026D3;
+            --text-main: #111827;
+            --text-dim: #4B5563;
+            --border-alpha: rgba(0, 0, 0, 0.08);
+            --glass-bg: rgba(255, 255, 255, 0.6);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-alpha);
+        }
+
+        .neon-border {
+            position: relative;
+            border-radius: 1rem;
+            background: var(--surface);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .neon-border::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: 1rem;
+            padding: 1px;
+            background: linear-gradient(45deg, var(--primary), transparent, var(--neon));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.3;
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+
+        .neon-border:hover::before {
+            opacity: 1;
+        }
+
+        .neon-border:hover {
+            box-shadow: 0 0 25px rgba(124, 58, 237, 0.15);
+            transform: translateY(-5px);
+        }
+
+        /* Background Layers */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(124, 58, 237, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black, transparent 80%);
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, transparent 0%, var(--bg-deep) 100%);
+            pointer-events: none;
+        }
+
+        /* Shimmer Effect for Hero Headline */
+        .shimmer-text {
+            background: linear-gradient(
+                to right,
+                var(--text-main) 20%,
+                var(--secondary) 40%,
+                var(--primary) 60%,
+                var(--text-main) 80%
+            );
+            background-size: 200% auto;
+            color: #000;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        /* Ticker Marquee */
+        .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+            display: flex;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .marquee-content {
+            display: flex;
+            animation: marquee 30s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn-neon {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-neon:hover {
+            box-shadow: 0 0 35px rgba(124, 58, 237, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .timeline-line {
+            background: linear-gradient(to bottom, var(--primary), var(--neon), transparent);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: #1e1e26; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* Stats Image Hover */
+        .stats-card img {
+            transition: transform 0.3s ease;
+        }
+        .stats-card:hover img {
+            transform: scale(1.02);
+        }
+
+        /* Success Modal */
+        #success-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #success-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            transform: scale(0.85);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #success-modal.show .modal-content {
+            transform: scale(1);
+        }
+        .checkmark-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: var(--neon);
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px var(--neon);
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+        .checkmark-check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+        @keyframes stroke { 100% { stroke-dashoffset: 0; } }
+        @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+        @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 40px rgba(232, 121, 249, 0.1); } }
+
+        /* Custom Skills Card */
+        .skills-card-custom {
+            background: #0B0B0F;
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .skills-title {
+            color: #E879F9;
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        .progress-bar-container {
+            display: flex;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            background: #14141A;
+        }
+        .progress-segment { height: 100%; transition: width 1s ease-in-out; }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 2rem;
+        }
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            color: #9CA3AF;
+        }
+        .skill-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .skill-name { font-weight: 500; }
+        .skill-percent { color: #4B5563; font-weight: normal; }
+    </style>
+</head>
+<body class="selection:bg-purple-500/30">
+
+    <!-- Background Components -->
+    <div id="canvas-container"></div>
+    <div class="grid-bg"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-white/5 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-tighter">
+                <span class="text-purple-600">VYSAKH</span><span class="text-purple-400"> P.M</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-10 text-sm font-medium text-gray-500">
+                <a href="#home" class="hover:text-purple-500 transition-colors">Home</a>
+                <a href="#about" class="hover:text-purple-500 transition-colors">About</a>
+                <a href="#skills" class="hover:text-purple-500 transition-colors">Skills</a>
+                <a href="#projects" class="hover:text-purple-500 transition-colors">Projects</a>
+                <a href="#experience" class="hover:text-purple-500 transition-colors">Experience</a>
+                <a href="#contact" class="hover:text-purple-500 transition-colors">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-2 lg:gap-4">
+                <a href="https://github.com/Vysakhpm" target="_blank" class="p-2 text-gray-400 hover:text-purple-500 transition" title="GitHub">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                </a>
+                <a href="https://linkedin.com/in/vysakh-mahesh" target="_blank" class="p-2 text-gray-400 hover:text-purple-500 transition" title="LinkedIn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+                <div class="h-4 w-[1px] bg-white/10 mx-2 hidden sm:block"></div>
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" class="p-2 rounded-full glass hover:bg-white/10 transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </button>
+                <button class="md:hidden" onclick="toggleMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                </button>
+                <a href="#contact" class="hidden md:block px-6 py-2 btn-neon rounded-full text-sm font-bold text-white">Hire Me</a>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full glass py-8 flex flex-col items-center space-y-6 md:hidden border-t border-white/5">
+            <a href="#home" onclick="toggleMenu()">Home</a>
+            <a href="#about" onclick="toggleMenu()">About</a>
+            <a href="#skills" onclick="toggleMenu()">Skills</a>
+            <a href="#projects" onclick="toggleMenu()">Projects</a>
+            <a href="#experience" onclick="toggleMenu()">Experience</a>
+            <a href="#contact" onclick="toggleMenu()">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex flex-col items-center justify-center pt-32 px-6 relative">
+        <div class="max-w-5xl text-center z-10 flex flex-col items-center">
+            <!-- Startup Badge -->
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-10 reveal">
+                <span class="flex h-2 w-2 rounded-full bg-purple-500 animate-pulse"></span>
+                <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400">Now Open for 2026 Collaborations</span>
+                <i data-lucide="chevron-right" class="w-3 h-3 text-gray-500"></i>
+            </div>
+
+            <h1 class="text-5xl md:text-8xl font-extrabold mb-8 leading-[1.1] tracking-tight reveal">
+                Engineering <br>
+                <span class="shimmer-text">Intelligent Systems</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-gray-500 mb-12 max-w-2xl leading-relaxed reveal">
+                Python Full-Stack Developer & Data Scientist building <span class="text-purple-500 font-semibold">autonomous backends</span> 
+                and <span class="text-purple-500 font-semibold">predictive models</span> for high-growth tech ecosystems.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6 reveal mb-20">
+                <a href="#projects" class="w-full sm:w-auto px-10 py-4 btn-neon rounded-xl font-bold flex items-center justify-center gap-3 text-white">
+                    Explore Ecosystem <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+                <a href="https://drive.google.com/file/d/145Y_AjdWRroLK1P9M5WFALZnZtzrg62F/view?usp=drivesdk" target="_blank" class="w-full sm:w-auto px-10 py-4 glass hover:bg-white/10 border border-white/10 rounded-xl font-bold transition flex items-center gap-2">
+                    <i data-lucide="download" class="w-4 h-4 text-purple-500"></i> Get Resume
+                </a>
+            </div>
+
+            <!-- Tech Ticker -->
+            <div class="w-full max-w-4xl reveal">
+                <p class="text-[10px] font-bold tracking-[0.3em] uppercase text-gray-400 mb-8">Trusted Tech Stack</p>
+                <div class="marquee py-4">
+                    <div class="marquee-content gap-12 text-sm font-mono text-gray-400 items-center">
+                        <span class="flex items-center gap-2"><i data-lucide="box" class="w-4 h-4"></i> DJANGO</span>
+                        <span class="flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4"></i> FASTAPI</span>
+                        <span class="flex items-center gap-2"><i data-lucide="brain-circuit" class="w-4 h-4"></i> PYTORCH</span>
+                        <span class="flex items-center gap-2"><i data-lucide="database" class="w-4 h-4"></i> POSTGRES</span>
+                        <span class="flex items-center gap-2"><i data-lucide="cloud" class="w-4 h-4"></i> AWS</span>
+                        <span class="flex items-center gap-2"><i data-lucide="layout" class="w-4 h-4"></i> REACT</span>
+                        <span class="flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4"></i> DOCKER</span>
+                        <span class="flex items-center gap-2"><i data-lucide="box" class="w-4 h-4"></i> DJANGO</span>
+                        <span class="flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4"></i> FASTAPI</span>
+                        <span class="flex items-center gap-2"><i data-lucide="brain-circuit" class="w-4 h-4"></i> PYTORCH</span>
+                        <span class="flex items-center gap-2"><i data-lucide="database" class="w-4 h-4"></i> POSTGRES</span>
+                        <span class="flex items-center gap-2"><i data-lucide="cloud" class="w-4 h-4"></i> AWS</span>
+                        <span class="flex items-center gap-2"><i data-lucide="layout" class="w-4 h-4"></i> REACT</span>
+                        <span class="flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4"></i> DOCKER</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-32 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div class="reveal relative">
+                    <div class="w-full aspect-square max-w-md mx-auto relative">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-purple-600 to-transparent rounded-3xl rotate-6 opacity-10"></div>
+                        <div class="absolute inset-0 border border-purple-500/20 rounded-3xl -rotate-3"></div>
+                        <div class="w-full h-full bg-slate-900 rounded-3xl overflow-hidden glass relative z-10 flex items-center justify-center">
+                            <img src="profile.jpeg" alt="Vysakh P M" class="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500">
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal">
+                    <h2 class="text-4xl font-bold mb-8">Data-Driven Engineer</h2>
+                    <p class="text-gray-500 text-lg mb-8 leading-relaxed">
+                        I specialize in creating end-to-end applications that leverage <span class="text-purple-500">machine learning</span> to provide intelligent insights. My experience spans from building RESTful APIs with <span class="text-purple-400">FastAPI</span> to deploying AI models on <span class="text-purple-400">AWS</span>.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+                        <div class="p-6 glass border border-white/5 rounded-2xl text-center">
+                            <h4 class="text-3xl font-bold mb-1">15+</h4>
+                            <p class="text-[10px] text-purple-400 uppercase tracking-widest font-bold">Solutions Built</p>
+                        </div>
+                        <div class="p-6 glass border border-white/5 rounded-2xl text-center">
+                            <h4 class="text-3xl font-bold mb-1">20+</h4>
+                            <p class="text-[10px] text-purple-400 uppercase tracking-widest font-bold">Technologies</p>
+                        </div>
+                        <div class="p-6 glass border border-white/5 rounded-2xl text-center">
+                            <h4 class="text-3xl font-bold mb-1">1+</h4>
+                            <p class="text-[10px] text-purple-400 uppercase tracking-widest font-bold">Years Experience</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coding Stats Section -->
+    <section id="stats" class="py-32 px-6 relative bg-slate-900/10">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal text-center mb-20">
+                <h2 class="text-4xl font-bold mb-4">Digital Pulse</h2>
+                <p class="text-gray-400">Quantifying innovation through code and activity.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <div class="reveal neon-border p-6 stats-card flex flex-col items-center justify-center min-h-[200px]">
+                    <img id="gh-stats" src="https://github-readme-stats.vercel.app/api?username=vysakhpm&show_icons=true&theme=radical&bg_color=0B0B0F&title_color=E879F9&text_color=9CA3AF&icon_color=7C3AED&border_color=14141A&hide_border=true" alt="GitHub Stats" class="max-w-full h-auto rounded-xl">
+                </div>
+                <div class="reveal neon-border p-6 stats-card flex flex-col items-center justify-center min-h-[200px]">
+                    <div class="skills-card-custom">
+                        <h3 class="skills-title">Most Used Languages</h3>
+                        <div class="progress-bar-container">
+                            <div class="progress-segment" style="width: 91.39%; background: #0077b6;"></div>
+                            <div class="progress-segment" style="width: 5.46%; background: #f34b7d;"></div>
+                            <div class="progress-segment" style="width: 2.11%; background: #61dafb;"></div>
+                            <div class="progress-segment" style="width: 1.04%; background: #828282;"></div>
+                        </div>
+                        <div class="skills-grid">
+                            <div class="skill-item">
+                                <span class="skill-dot" style="background: #0077b6;"></span>
+                                <span class="skill-name">Python <span class="skill-percent">91.39%</span></span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-dot" style="background: #828282;"></span>
+                                <span class="skill-name">C <span class="skill-percent">0.58%</span></span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-dot" style="background: #f34b7d;"></span>
+                                <span class="skill-name">C++ <span class="skill-percent">5.46%</span></span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-dot" style="background: #0077b6;"></span>
+                                <span class="skill-name">TypeScript <span class="skill-percent">0.31%</span></span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-dot" style="background: #61dafb;"></span>
+                                <span class="skill-name">React <span class="skill-percent">2.11%</span></span>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-dot" style="background: #e34c26;"></span>
+                                <span class="skill-name">HTML <span class="skill-percent">0.15%</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contribution Graph -->
+            <div class="reveal neon-border p-8 text-center overflow-x-auto">
+                <p class="text-xs font-bold tracking-widest text-purple-400 uppercase mb-6 flex items-center justify-center gap-2">
+                    <i data-lucide="git-branch" class="w-3 h-3"></i> Open Source Contributions
+                </p>
+                <div class="inline-block min-w-max">
+                    <img id="gh-graph" src="https://ghchart.rshah.org/7C3AED/vysakhpm" alt="GitHub Contribution Graph" class="rounded-lg opacity-80 hover:opacity-100 transition-opacity duration-500">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-32 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal text-center mb-20">
+                <h2 class="text-4xl font-bold mb-4">Core Ecosystem</h2>
+                <p class="text-gray-400">My technical toolkit for building intelligent systems.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="reveal neon-border p-8">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="p-3 rounded-lg bg-purple-500/10 text-purple-500"><i data-lucide="code-2"></i></div>
+                        <h3 class="text-xl font-bold">Languages</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3 text-sm">
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">Python</span>
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">JavaScript</span>
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">SQL</span>
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">React</span>
+                    </div>
+                </div>
+
+                <div class="reveal neon-border p-8">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="p-3 rounded-lg bg-blue-500/10 text-blue-500"><i data-lucide="layout"></i></div>
+                        <h3 class="text-xl font-bold">Backend</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3 text-sm">
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">Django / DRF</span>
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">RESTAPI</span>
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">PostgreSQL</span>
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">Redis</span>
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">AWS</span>
+                    </div>
+                </div>
+
+                <div class="reveal neon-border p-8">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="p-3 rounded-lg bg-pink-500/10 text-pink-500"><i data-lucide="brain"></i></div>
+                        <h3 class="text-xl font-bold">AI & Data</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3 text-sm">
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">Pandas / NumPy</span>
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">Scikit-Learn</span>
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">YOLOv8 / NLP</span>
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-md">Power BI</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-32 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal mb-16">
+                <h2 class="text-4xl font-bold mb-4">Featured Innovations</h2>
+                <p class="text-gray-400">End-to-end applications solving high-value problems.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="reveal neon-border group overflow-hidden">
+                    <div class="h-64 bg-slate-900 overflow-hidden relative">
+                        <img src="plagiarism_detector.png" alt="Plagiarism Detection System" class="w-full h-full object-cover object-top opacity-50 group-hover:opacity-100 group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold mb-4">Plagiarism Detection System</h3>
+                        <p class="text-gray-400 mb-6 text-sm">Full-stack platform using Django and Next.js. Achieves 95% accuracy using TF-IDF and K-Gram text analysis.</p>
+                        <div class="flex space-x-6">
+                            <a href="https://plagiarism-detector-smoky.vercel.app" target="_blank" class="text-sm font-bold text-purple-600 hover:text-purple-400 transition flex items-center gap-2">
+                                <i data-lucide="external-link" class="w-4 h-4"></i> Live Demo
+                            </a>
+                            <a href="https://github.com/Vysakhpm/Plagiarism-detector" target="_blank" class="text-sm font-bold text-purple-600 hover:text-purple-400 transition flex items-center gap-2">
+                                <i data-lucide="github" class="w-4 h-4"></i> Source
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal neon-border group overflow-hidden">
+                    <div class="h-64 bg-slate-900 overflow-hidden relative">
+                        <img src="coding_campuz.png" alt="Coding Campuz" class="w-full h-full object-cover object-top opacity-50 group-hover:opacity-100 group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold mb-4">Coding Campuz</h3>
+                        <p class="text-gray-400 mb-6 text-sm">Educational platform for software training in Kochi, featuring placement-ready programs and real-world projects.</p>
+                        <div class="flex space-x-6">
+                            <a href="https://codingcampuz.com/" target="_blank" class="text-sm font-bold text-purple-600 hover:text-purple-400 transition flex items-center gap-2">
+                                <i data-lucide="external-link" class="w-4 h-4"></i> Live Demo
+                            </a>
+                            <a href="https://github.com/Vysakhpm/Coding_Campuz_website" target="_blank" class="text-sm font-bold text-purple-600 hover:text-purple-400 transition flex items-center gap-2">
+                                <i data-lucide="github" class="w-4 h-4"></i> Source
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience -->
+    <section id="experience" class="py-32 px-6 bg-slate-900/10">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl font-bold mb-16 text-center">Journey</h2>
+            <div class="relative space-y-12">
+                <div class="absolute left-0 md:left-1/2 top-0 bottom-0 w-px timeline-line"></div>
+                
+                <div class="reveal relative flex flex-col md:flex-row md:justify-between items-center w-full">
+                    <div class="hidden md:block w-5/12"></div>
+                    <div class="absolute left-[-10px] md:left-1/2 md:ml-[-10px] w-5 h-5 bg-purple-500 rounded-full border-4 border-slate-950 z-10"></div>
+                    <div class="w-full md:w-5/12 glass p-8 rounded-2xl border border-purple-500/10">
+                        <span class="text-xs font-mono text-purple-400 font-bold uppercase">2026 – Present</span>
+                        <h3 class="text-xl font-bold mt-2">Jr. Python Full-Stack Developer</h3>
+                        <p class="text-sm text-slate-500">S-Technologies</p>
+                    </div>
+                </div>
+
+                <div class="reveal relative flex flex-col md:flex-row-reverse md:justify-between items-center w-full">
+                    <div class="hidden md:block w-5/12"></div>
+                    <div class="absolute left-[-10px] md:left-1/2 md:ml-[-10px] w-5 h-5 bg-blue-500 rounded-full border-4 border-slate-950 z-10"></div>
+                    <div class="w-full md:w-5/12 glass p-8 rounded-2xl border border-blue-500/10">
+                        <span class="text-xs font-mono text-blue-400 font-bold uppercase">2024 – 2025</span>
+                        <h3 class="text-xl font-bold mt-2">Junior Software Developer</h3>
+                        <p class="text-sm text-slate-500">Gofreelab Technologies</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-32 px-6">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
+                <div class="reveal">
+                    <h2 class="text-4xl font-bold mb-6">Let's Build <br><span class="text-purple-500">Something Intelligent.</span></h2>
+                    <p class="text-gray-400 mb-10">Currently exploring new opportunities in AI-driven backend development.</p>
+                    <div class="space-y-6 text-sm">
+                        <div class="flex items-center gap-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500"><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><rect width="20" height="16" x="2" y="4" rx="2"/></svg>
+                            <span>vysakpm4@gmail.com</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <a href="tel:+919061845782" class="hover:text-purple-500 transition-colors">+91 9061845782</a>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                            <a href="https://linkedin.com/in/vysakh-mahesh" target="_blank" class="hover:text-purple-500 transition-colors">LinkedIn /vysakh-mahesh</a>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                            <a href="https://github.com/Vysakhpm" target="_blank" class="hover:text-purple-500 transition-colors">GitHub /Vysakhpm</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal neon-border p-8">
+                    <script>let submitted = false;</script>
+                    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) { showSuccessPopup(); }"></iframe>
+                    <form class="space-y-6" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLScD9kHm-P3di0PfvMgeRQGiG4iMUp2b9B17CSOXne0Tr4rVIA/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
+                        <input type="text" name="entry.815094634" placeholder="Full Name" required class="w-full bg-transparent border-b border-white/10 py-3 focus:outline-none focus:border-purple-500 transition">
+                        <input type="email" name="entry.2075455690" placeholder="Email Address" required class="w-full bg-transparent border-b border-white/10 py-3 focus:outline-none focus:border-purple-500 transition">
+                        <textarea name="entry.103906369" placeholder="Your Message" rows="4" required class="w-full bg-transparent border-b border-white/10 py-3 focus:outline-none focus:border-purple-500 transition"></textarea>
+                        <button type="submit" class="w-full py-4 btn-neon rounded-xl font-bold uppercase tracking-widest text-sm text-white">Send Transmission</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-16 px-6 border-t border-white/5 text-center">
+        <div class="flex justify-center gap-8 mb-8">
+            <a href="https://github.com/Vysakhpm" target="_blank" class="text-gray-500 hover:text-purple-500 transition-all duration-300 transform hover:scale-125" title="GitHub">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+            </a>
+            <a href="https://linkedin.com/in/vysakh-mahesh" target="_blank" class="text-gray-500 hover:text-purple-500 transition-all duration-300 transform hover:scale-125" title="LinkedIn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="mailto:vysakpm4@gmail.com" class="text-gray-500 hover:text-purple-500 transition-all duration-300 transform hover:scale-125" title="Email">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><rect width="20" height="16" x="2" y="4" rx="2"/></svg>
+            </a>
+        </div>
+        <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em] opacity-50">
+            &copy; 2025 VYSAKH PM | Engineered with Python & Intelligence
+        </p>
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="success-modal">
+        <div class="modal-content glass p-10 rounded-3xl border border-white/10 text-center max-w-sm mx-6">
+            <div class="flex justify-center mb-6">
+                <svg class="checkmark-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Transmission Received</h3>
+            <p class="text-gray-400 text-sm mb-8">I have received your message and will get back to you shortly.</p>
+            <button onclick="closeModal()" class="w-full py-3 glass hover:bg-white/10 border border-white/10 rounded-xl font-bold transition text-sm">
+                Dismiss
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // --- Theme Toggle Logic ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const ghStats = document.getElementById('gh-stats');
+        const ghLangs = document.getElementById('gh-langs');
+
+        themeToggle.addEventListener('click', () => {
+            const isLight = document.documentElement.classList.toggle('light');
+            themeIcon.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
+            
+            // Update GitHub Stats theme based on mode
+            const ghTheme = isLight ? 'default' : 'radical';
+            const bgColor = isLight ? 'F3F4F6' : '0B0B0F';
+            const titleColor = isLight ? '6D28D9' : 'E879F9';
+            
+            ghStats.src = `https://github-readme-stats.vercel.app/api?username=vysakhpm&show_icons=true&theme=${ghTheme}&bg_color=${bgColor}&title_color=${titleColor}&text_color=4B5563&icon_color=7C3AED&border_color=14141A&hide_border=true`;
+            ghLangs.src = `https://github-readme-stats.vercel.app/api/top-langs/?username=vysakhpm&layout=compact&theme=${ghTheme}&bg_color=${bgColor}&title_color=${titleColor}&text_color=4B5563&icon_color=7C3AED&border_color=14141A&hide_border=true`;
+            
+            lucide.createIcons();
+            
+            // Adjust Three.js for Light Mode visibility
+            if (particles) {
+                // In light mode, use Normal Blending so particles are visible on white
+                particles.material.blending = isLight ? THREE.NormalBlending : THREE.AdditiveBlending;
+                particles.material.color.setHex(isLight ? 0x6D28D9 : 0x7C3AED);
+                particles.material.opacity = isLight ? 0.4 : 0.8;
+                particles.material.needsUpdate = true;
+            }
+            if (lines) {
+                lines.material.color.setHex(isLight ? 0x9333EA : 0xA855F7);
+                lines.material.opacity = isLight ? 0.08 : 0.1;
+                lines.material.needsUpdate = true;
+            }
+        });
+
+        // --- 3D Background Logic (Three.js) ---
+        let scene, camera, renderer, particles, lines;
+        const particleCount = 80;
+        const particlesData = [];
+        const container = document.getElementById('canvas-container');
+        let mouseX = 0, mouseY = 0;
+
+        function initThree() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = 400;
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            const geometry = new THREE.BufferGeometry();
+            const particlePositions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount; i++) {
+                const x = Math.random() * 800 - 400;
+                const y = Math.random() * 800 - 400;
+                const z = Math.random() * 800 - 400;
+
+                particlePositions[i * 3] = x;
+                particlePositions[i * 3 + 1] = y;
+                particlePositions[i * 3 + 2] = z;
+
+                particlesData.push({
+                    velocity: new THREE.Vector3(-1 + Math.random() * 2, -1 + Math.random() * 2, -1 + Math.random() * 2),
+                    numConnections: 0
+                });
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3).setUsage(THREE.DynamicDrawUsage));
+
+            const material = new THREE.PointsMaterial({
+                color: 0x7C3AED,
+                size: 3,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                sizeAttenuation: true
+            });
+
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            const lineGeometry = new THREE.BufferGeometry();
+            const lineMaterial = new THREE.LineBasicMaterial({
+                color: 0xA855F7,
+                transparent: true,
+                opacity: 0.1
+            });
+            lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+            scene.add(lines);
+
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const positions = particles.geometry.attributes.position.array;
+            const linePositions = [];
+            
+            for (let i = 0; i < particleCount; i++) {
+                const pData = particlesData[i];
+                positions[i * 3] += pData.velocity.x * 0.5;
+                positions[i * 3 + 1] += pData.velocity.y * 0.5;
+                positions[i * 3 + 2] += pData.velocity.z * 0.5;
+
+                if (positions[i * 3] < -400 || positions[i * 3] > 400) pData.velocity.x *= -1;
+                if (positions[i * 3 + 1] < -400 || positions[i * 3 + 1] > 400) pData.velocity.y *= -1;
+                if (positions[i * 3 + 2] < -400 || positions[i * 3 + 2] > 400) pData.velocity.z *= -1;
+
+                for (let j = i + 1; j < particleCount; j++) {
+                    const dx = positions[i * 3] - positions[j * 3];
+                    const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                    const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                    const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                    if (dist < 150) {
+                        linePositions.push(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+                        linePositions.push(positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]);
+                    }
+                }
+            }
+
+            particles.geometry.attributes.position.needsUpdate = true;
+            lines.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+            camera.position.x += (mouseX - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) * 0.2;
+            mouseY = (e.clientY - window.innerHeight / 2) * 0.2;
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- Success Modal Logic ---
+        function showSuccessPopup() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.add('show');
+            
+            // Success Sound
+            const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+            audio.volume = 0.5;
+            audio.play().catch(e => console.log("Audio play blocked by browser"));
+
+            // Clear Form
+            document.querySelector('.space-y-6').reset();
+            submitted = false;
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('show');
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('success-modal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        window.onload = initThree;
+    </script>
+</body>
+</html>
